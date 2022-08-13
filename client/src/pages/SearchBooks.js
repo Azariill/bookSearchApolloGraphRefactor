@@ -10,13 +10,13 @@ import {
   Card,
   CardColumns,
 } from "react-bootstrap";
-import { useQuery, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { SAVE_BOOK } from "../utils/mutations";
-import { QUERY_GET_ME } from "../utils/queries";
+
 
 import Auth from "../utils/auth";
 
-import { saveBook, searchGoogleBooks } from "../utils/API";
+import { searchGoogleBooks } from "../utils/API";
 import { saveBookIds, getSavedBookIds } from "../utils/localStorage";
 
 const SearchBooks = () => {
@@ -29,7 +29,7 @@ const SearchBooks = () => {
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds(""));
 
   //save new book to database
-  const [saveBook, { error }] = useMutation(SAVE_BOOK);
+  const [saveBook] = useMutation(SAVE_BOOK);
 
 
 
@@ -57,12 +57,15 @@ const SearchBooks = () => {
 
       const { items } = await response.json();
 
+      console.log(items);
+
       const bookData = items.map((book) => ({
         bookId: book.id,
         authors: book.volumeInfo.authors || ["No author to display"],
         title: book.volumeInfo.title,
         description: book.volumeInfo.description,
         image: book.volumeInfo.imageLinks?.thumbnail || "",
+        link: book.volumeInfo.infoLink
       }));
 
       setSearchedBooks(bookData);
@@ -87,14 +90,14 @@ const SearchBooks = () => {
     //get user id via user load refer to profile page of deep-thoughts
 
     try {
-      console.log(bookToSave);
-      const response = await saveBook({
+     
+       await saveBook({
         variables:  {input: bookToSave}  }
       );
 
       
 
-     
+      
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
@@ -150,6 +153,7 @@ const SearchBooks = () => {
                   <Card.Title>{book.title}</Card.Title>
                   <p className="small">Authors: {book.authors}</p>
                   <Card.Text>{book.description}</Card.Text>
+                  <Card.Link><a href={book.link} target="_blank" without rel="noopener noreferrer">Click here to purchase on Google Books!</a><br/></Card.Link><br></br>
                   {Auth.loggedIn() && (
                     <Button
                       disabled={savedBookIds?.some(
