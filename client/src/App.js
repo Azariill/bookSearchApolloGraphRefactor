@@ -38,7 +38,10 @@ function App() {
           <Navbar />
             <Routes>
               <Route  path='/' element={<SearchBooks/>} />
-              <Route  path='/saved' element={<SavedBooks key={Date.now()}/>} />
+              <Route
+                    path="/saved"
+                    render={(props) => <SavedBooks key={props.location.key} />}
+               />
               <Route render={() => <h1 className='display-2'>Wrong page!</h1>} />
           </Routes>
       
