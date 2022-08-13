@@ -18,7 +18,6 @@
 
 ## Table of Contents
   [Installation](#installation)<br>
-  [Usage](#usage)<br>
   [Questions](#questions)<br>
   
 ## Installation
