@@ -10,7 +10,7 @@ import {
   createHttpLink,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import Switch from 'react-bootstrap/esm/Switch';
+
 
 const httpLink = createHttpLink({
   uri: '/graphql',
