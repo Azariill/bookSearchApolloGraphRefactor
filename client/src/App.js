@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import SearchBooks from './pages/SearchBooks';
 import SavedBooks from './pages/SavedBooks';
 import Navbar from './components/Navbar';
@@ -10,6 +10,7 @@ import {
   createHttpLink,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import Switch from 'react-bootstrap/esm/Switch';
 
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -33,17 +34,14 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
-      <Router>
+      <Router forceRefresh={true}>
       
           <Navbar />
-            <Routes>
+            <Switch>
               <Route  path='/' element={<SearchBooks/>} />
-              <Route
-                    path="/saved"
-                    render={(props) => <SavedBooks key={props.location.key} />}
-               />
+              <Route  path='/saved' element={<SavedBooks key={Date.now()}/>} />
               <Route render={() => <h1 className='display-2'>Wrong page!</h1>} />
-          </Routes>
+          </Switch>
       
       </Router>
     </ApolloProvider>
